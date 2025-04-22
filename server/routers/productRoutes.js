@@ -6,8 +6,8 @@ const {
   createNewProduct,
   //   getAllProducts,
   //   getProductById,
-  //   updateProduct,
-  //   deleteProduct,
+  updateProduct,
+  deleteProduct,
   //   searchProducts,
   //   getProductsByCategory,
   //   getProductsByBrand,
@@ -18,8 +18,8 @@ const router = express.Router();
 router.post("/", customerMiddleware, adminMiddleware, createNewProduct);
 // router.get("/", getAllProducts);
 // router.get("/:id", getProductById);
-// router.put("/:id", protect, updateProduct);
-// router.delete("/:id", protect, deleteProduct);
+router.put("/:id", customerMiddleware, adminMiddleware, updateProduct);
+router.delete("/:id", customerMiddleware, adminMiddleware, deleteProduct);
 // router.get("/search", searchProducts);
 // router.get("/category/:category", getProductsByCategory);
 // router.get("/brand/:brand", getProductsByBrand);
