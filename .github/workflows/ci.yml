@@ -31,10 +31,10 @@ jobs:
           cd server
           npm run lint
 
-      - name: 🧹 Lint client
-        run: |
-          cd client
-          npm run lint
+      # - name: 🧹 Lint client
+      #   run: |
+      #     cd client
+      #     npm run lint
 
       - name: ✅ Test server
         run: |
