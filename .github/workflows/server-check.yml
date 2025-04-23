@@ -1,0 +1,41 @@
+name: Server Health Check
+
+on:
+  push:
+    paths:
+      - 'server/**'
+  pull_request:
+    paths:
+      - 'server/**'
+
+jobs:
+  check-server:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint the code (optional)
+        run: pnpm lint
+
+      - name: Check for syntax or runtime errors
+        run: node -c server.js
+
+      - name: Start server for health check
+        run: |
+          nohup node server.js &
+          sleep 5
+          curl -f http://localhost:5000 || exit 1
