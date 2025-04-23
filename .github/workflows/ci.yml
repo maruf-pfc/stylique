@@ -14,19 +14,34 @@ jobs:
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
-      - name: 📦 Install dependencies (root)
-        run: npm install --workspaces --legacy-peer-deps
+      - name: 📦 Install server dependencies
+        run: |
+          cd server
+          npm install
+
+      - name: 📦 Install client dependencies
+        run: |
+          cd client
+          npm install
 
       - name: 🧹 Lint server
-        run: npm run lint --workspace=server
+        run: |
+          cd server
+          npm run lint
 
       - name: 🧹 Lint client
-        run: npm run lint --workspace=client
+        run: |
+          cd client
+          npm run lint
 
       - name: ✅ Test server
-        run: npm run test --workspace=server
+        run: |
+          cd server
+          npm test
 
       - name: ✅ Test client
-        run: npm run test --workspace=client
+        run: |
+          cd client
+          npm test
