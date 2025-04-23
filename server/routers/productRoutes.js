@@ -12,9 +12,6 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
-  //   searchProducts,
-  //   getProductsByCategory,
-  //   getProductsByBrand,
 } = require("../controllers/productController");
 
 const router = express.Router();
@@ -28,8 +25,5 @@ router.post("/", customerMiddleware, adminMiddleware, createNewProduct);
 router.get("/:id", getProductById);
 router.put("/:id", customerMiddleware, adminMiddleware, updateProduct);
 router.delete("/:id", customerMiddleware, adminMiddleware, deleteProduct);
-// router.get("/search", searchProducts);
-// router.get("/category/:category", getProductsByCategory);
-// router.get("/brand/:brand", getProductsByBrand);
 
 module.exports = router;

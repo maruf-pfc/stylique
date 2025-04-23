@@ -6,6 +6,7 @@ const chalk = require("chalk");
 const dbConnection = require("./configs/db");
 const userRoutes = require("./routers/userRoutes");
 const productRoutes = require("./routers/productRoutes");
+const cartRoutes = require("./routers/cartRoutes");
 
 // Application setup
 const app = express();
@@ -19,20 +20,22 @@ app.use(cors());
 app.use(express.json());
 
 // Add emoji based on status codes
-morgan.token('emoji', function (req, res) {
+morgan.token("emoji", function (req, res) {
   const status = res.statusCode;
 
-  if (status >= 100 && status < 200) return '🌀';           // Informational
-  if (status >= 200 && status < 300) return '✅';           // Success
-  if (status >= 300 && status < 400) return '📦';           // Redirection
-  if (status >= 400 && status < 500) return '⚠️';           // Client Error
-  if (status >= 500 && status < 600) return '💥';           // Server Error
+  if (status >= 100 && status < 200) return "🌀"; // Informational
+  if (status >= 200 && status < 300) return "✅"; // Success
+  if (status >= 300 && status < 400) return "📦"; // Redirection
+  if (status >= 400 && status < 500) return "⚠️"; // Client Error
+  if (status >= 500 && status < 600) return "💥"; // Server Error
 
-  return '❓'; // Unknown
+  return "❓"; // Unknown
 });
 
 // Custom log format with colors and emojis
-const customFormat = `${chalk.green(':method')} ${chalk.blue(':url')} ${chalk.yellow(':status')} :emoji - ${chalk.magenta(':response-time ms')}`;
+const customFormat = `${chalk.green(":method")} ${chalk.blue(
+  ":url"
+)} ${chalk.yellow(":status")} :emoji - ${chalk.magenta(":response-time ms")}`;
 
 app.use(morgan(customFormat));
 
@@ -42,6 +45,7 @@ dbConnection(MONGO_URI);
 // Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
 
 // Start server
 app.listen(PORT, () => {
