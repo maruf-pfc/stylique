@@ -168,7 +168,7 @@ const authOrGuestUserCart = async (req, res) => {
 };
 
 const mergeGuestCart = async (req, res) => {
-  const { userId, guestId } = req.body;
+  const { guestId } = req.body;
 
   try {
     // Find the guest cart

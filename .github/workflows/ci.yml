@@ -6,18 +6,32 @@ on: [push, pull_request]
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup pnpm
-        run: |
-          export SHELL=/bin/bash
-          curl -fsSL https://get.pnpm.io/install.sh | sh -
-          export PATH="$HOME/.local/share/pnpm:$PATH"
-      - uses: actions/setup-node@v4
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: pnpm install
-      - run: pnpm --filter "./server" lint
-      - run: pnpm --filter "./client" lint
-      - run: pnpm --filter "./server" test
-      - run: pnpm --filter "./client" test
+
+      - name: 🧶 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🧹 Lint server
+        run: pnpm --filter server lint
+
+      - name: 🧹 Lint client
+        run: pnpm --filter client lint
+
+      - name: ✅ Test server
+        run: pnpm --filter server test
+
+      - name: ✅ Test client
+        run: pnpm --filter client test

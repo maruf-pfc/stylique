@@ -7,6 +7,8 @@ const dbConnection = require("./configs/db");
 const userRoutes = require("./routers/userRoutes");
 const productRoutes = require("./routers/productRoutes");
 const cartRoutes = require("./routers/cartRoutes");
+const checkoutRoutes = require("./routers/checkoutRoutes");
+const orderRoutes = require("./routers/orderRoutes");
 
 // Application setup
 const app = express();
@@ -46,6 +48,8 @@ dbConnection(MONGO_URI);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/checkout", checkoutRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Start server
 app.listen(PORT, () => {
