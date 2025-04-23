@@ -14,24 +14,19 @@ jobs:
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: 🧶 Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: 📦 Install dependencies
-        run: pnpm install
+      - name: 📦 Install dependencies (root)
+        run: npm install --workspaces --legacy-peer-deps
 
       - name: 🧹 Lint server
-        run: pnpm --filter server lint
+        run: npm run lint --workspace=server
 
       - name: 🧹 Lint client
-        run: pnpm --filter client lint
+        run: npm run lint --workspace=client
 
       - name: ✅ Test server
-        run: pnpm --filter server test
+        run: npm run test --workspace=server
 
       - name: ✅ Test client
-        run: pnpm --filter client test
+        run: npm run test --workspace=client
