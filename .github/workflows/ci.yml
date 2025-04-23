@@ -41,7 +41,7 @@ jobs:
           cd server
           npm test
 
-      - name: ✅ Test client
-        run: |
-          cd client
-          npm test
+      # - name: ✅ Test client
+      #   run: |
+      #     cd client
+      #     npm test

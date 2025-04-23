@@ -19,4 +19,10 @@ export default defineConfig([
       sourceType: "commonjs", // ✅ Required if you're using require/module.exports
     },
   },
+  {
+    files: ["tests/**/*.js"], // Target the tests folder
+    rules: {
+      "no-undef": "off", // Disable the 'no-undef' rule for tests
+    },
+  },
 ]);
