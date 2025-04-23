@@ -3,10 +3,10 @@ name: Server Health Check
 on:
   push:
     paths:
-      - 'server/**'
+      - "server/**"
   pull_request:
     paths:
-      - 'server/**'
+      - "server/**"
 
 jobs:
   check-server:
@@ -23,7 +23,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+
+      - name: Setup pnpm
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          export PATH=$HOME/.pnpm/global/5/bin:$PATH
 
       - name: Install dependencies
         run: pnpm install

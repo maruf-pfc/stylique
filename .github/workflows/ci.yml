@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - name: Setup pnpm
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          export PATH=$HOME/.pnpm/global/5/bin:$PATH
+      - uses: actions/setup-node@v4
         with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+          node-version: 18
       - run: pnpm install
       - run: pnpm --filter "./server" lint
       - run: pnpm --filter "./client" lint
       - run: pnpm --filter "./server" test
       - run: pnpm --filter "./client" test
+
