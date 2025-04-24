@@ -32,7 +32,7 @@ const Navbar = () => {
         {/* Center - Navigation Links */}
         <div className="hidden md:flex space-x-6">
           <Link
-            to="#"
+            to="/collection/all"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Men
@@ -96,7 +96,7 @@ const Navbar = () => {
           <h2 className="text-xm font-semibold mb-4">Menu</h2>
           <nav className="space-y-4">
             <Link
-              to="#"
+              to="/collection/all"
               className="block py-2 text-gray-700 hover:text-black"
               onClick={toggleNavDrawer}
             >
