@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  title: Shopping Cart API
+  version: 1.0.0
+tags:
+  - name: Cart
+    description: Shopping cart management
+paths:
+  /api/cart:
+    post:
+      summary: Add product to cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+                - quantity
+              properties:
+                productId:
+                  type: string
+                  description: Product ID
+                quantity:
+                  type: number
+                  description: Quantity to add
+                userId:
+                  type: string
+                  description: User ID (for guest cart)
+              example:
+                productId: 60d21b4667d0d8992e610c85
+                quantity: 2
+                userId: guest-123456
+      responses:
+        200:
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update product quantity in cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+                - quantity
+              properties:
+                productId:
+                  type: string
+                  description: Product ID
+                quantity:
+                  type: number
+                  description: New quantity
+                userId:
+                  type: string
+                  description: User ID (for guest cart)
+              example:
+                productId: 60d21b4667d0d8992e610c85
+                quantity: 3
+                userId: guest-123456
+      responses:
+        200:
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Product not found in cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Remove product from cart
+      tags: [Cart]
+      parameters:
+        - in: query
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: Product ID to remove
+        - in: query
+          name: userId
+          required: false
+          schema:
+            type: string
+          description: Guest user ID (optional for guest carts)
+      responses:
+        200:
+          description: Product removed from cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Product not found in cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      summary: Get user cart
+      tags: [Cart]
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          description: Guest user ID (optional)
+      responses:
+        200:
+          description: User cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/cart/merge:
+    post:
+      summary: Merge guest cart with user cart
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - guestId
+              properties:
+                guestId:
+                  type: string
+                  description: Guest user ID
+              example:
+                guestId: guest-123456
+      responses:
+        200:
+          description: Carts merged successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        userId:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: number
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

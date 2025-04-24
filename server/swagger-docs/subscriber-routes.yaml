@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Newsletter Subscription API
+  description: API for subscribing to the newsletter
+  version: 1.0.0
+
+tags:
+  - name: Subscribers
+    description: Newsletter subscription
+
+paths:
+  /api/subscribers/subscribe:
+    post:
+      summary: Subscribe to newsletter
+      tags: [Subscribers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Subscriber email
+              example:
+                email: subscriber@example.com
+      responses:
+        201:
+          description: Subscribed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+        400:
+          description: Invalid email or already subscribed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Subscriber:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Subscriber's email address
+      example:
+        email: subscriber@example.com
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+      example:
+        message: Invalid email or already subscribed
+        code: 400

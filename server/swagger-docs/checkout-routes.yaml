@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: Shopping API
+  description: API for managing cart, checkout, and orders
+  version: 1.0.0
+tags:
+  - name: Checkout
+    description: Checkout process
+
+paths:
+  /api/checkout:
+    post:
+      summary: Create a new checkout
+      tags: [Checkout]
+      security:
+        - bearerAuth: []  # Corrected security definition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - shippingAddress
+                - paymentMethod
+              properties:
+                shippingAddress:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                    city:
+                      type: string
+                    postalCode:
+                      type: string
+                    country:
+                      type: string
+                paymentMethod:
+                  type: string
+              example:
+                shippingAddress:
+                  address: 123 Main St
+                  city: Anytown
+                  postalCode: 12345
+                  country: USA
+                paymentMethod: PayPal
+      responses:
+        201:
+          description: Checkout created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Checkout'
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/checkout/{id}/pay:
+    put:
+      summary: Update checkout to paid
+      tags: [Checkout]
+      security:
+        - bearerAuth: []  # Corrected security definition
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Checkout ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paymentResult
+              properties:
+                paymentResult:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      type: string
+                    update_time:
+                      type: string
+                    email_address:
+                      type: string
+              example:
+                paymentResult:
+                  id: PAY-1234567890
+                  status: COMPLETED
+                  update_time: 2023-01-01T12:00:00Z
+                  email_address: customer@example.com
+      responses:
+        200:
+          description: Checkout updated to paid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Checkout'
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Checkout not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/checkout/{id}/finalize:
+    post:
+      summary: Finalize checkout and create order
+      tags: [Checkout]
+      security:
+        - bearerAuth: []  # Corrected security definition
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Checkout ID
+      responses:
+        201:
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Checkout not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:  # Defining security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # Assuming you are using JWT token for authorization
+
+  schemas:
+    Checkout:
+      type: object
+      properties:
+        id:
+          type: string
+        shippingAddress:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+            country:
+              type: string
+        paymentMethod:
+          type: string
+        status:
+          type: string
+      example:
+        id: 60d21b4667d0d8992e610c85
+        shippingAddress:
+          address: 123 Main St
+          city: Anytown
+          postalCode: 12345
+          country: USA
+        paymentMethod: PayPal
+        status: Pending
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: number
+              price:
+                type: number
+        totalAmount:
+          type: number
+      example:
+        id: order-123456
+        items:
+          - productId: prod-001
+            quantity: 2
+            price: 20
+          - productId: prod-002
+            quantity: 1
+            price: 50
+        totalAmount: 90
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+      example:
+        message: Not authorized
+        code: 401

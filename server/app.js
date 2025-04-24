@@ -4,6 +4,10 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const chalk = require("chalk");
+const rateLimiter = require("./middlewares/rateLimiter");
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const path = require('path');
 
 const dbConnection = require("./configs/db");
 const userRoutes = require("./routers/userRoutes");
@@ -21,6 +25,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Apply rate limiter to all requests
+app.use(rateLimiter);
+
 // Custom emoji + morgan setup
 morgan.token("emoji", (req, res) => {
   const status = res.statusCode;
@@ -35,6 +42,22 @@ const customFormat = `${chalk.green(":method")} ${chalk.blue(
   ":url"
 )} ${chalk.yellow(":status")} :emoji - ${chalk.magenta(":response-time ms")}`;
 app.use(morgan(customFormat));
+
+// Declare each route YAML only once
+const adminOrderRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'admin-order-routes.yaml'));
+const adminProductRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'admin-product-routes.yaml'));
+const cartRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'cart-routes.yaml'));
+const checkoutRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'checkout-routes.yaml'));
+const productRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'product-routes.yaml'));
+const userRoute = YAML.load(path.join(__dirname, 'swagger-docs', 'user-routes.yaml'));
+
+// Serve Swagger UI at different routes
+app.use('/api-docs/admin/orders', swaggerUi.serve, swaggerUi.setup(adminOrderRoute));
+app.use('/api-docs/admin/products', swaggerUi.serve, swaggerUi.setup(adminProductRoute));
+app.use('/api-docs/cart', swaggerUi.serve, swaggerUi.setup(cartRoute));
+app.use('/api-docs/checkout', swaggerUi.serve, swaggerUi.setup(checkoutRoute));
+app.use('/api-docs/products', swaggerUi.serve, swaggerUi.setup(productRoute));
+app.use('/api-docs/users', swaggerUi.serve, swaggerUi.setup(userRoute));
 
 // Mongo connection (only once in main entry file)
 if (process.env.NODE_ENV !== "test") {

@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: Admin Product Management API
+  version: 1.0.0
+tags:
+  - name: AdminProducts
+    description: Admin product management
+
+paths:
+  /api/admin/products:
+    get:
+      summary: Get all products (admin view)
+      tags: [AdminProducts]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of all products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Not admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        stock:
+          type: number
+        category:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
