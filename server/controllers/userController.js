@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
         res.status(201).json({
           status: "success",
           message: "User registered successfully",
-          data: {
+          user: {
             _id: user._id,
             name: user.name,
             email: user.email,
@@ -95,7 +95,7 @@ const loginUser = async (req, res) => {
         res.json({
           status: "success",
           message: "Login successful",
-          data: {
+          user: {
             _id: user._id,
             name: user.name,
             email: user.email,
@@ -114,7 +114,7 @@ const userProfile = async (req, res) => {
   res.json({
     status: "success",
     message: "User profile retrieved successfully",
-    data: {
+    user: {
       _id: req.user._id,
       name: req.user.name,
       email: req.user.email,

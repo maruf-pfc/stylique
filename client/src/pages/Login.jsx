@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import login from "../assets/login.webp";
 import { Link } from "react-router-dom";
+import { loginUser } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("User Login:", { email, password });
-    // Reset form fields
+    dispatch(loginUser({ email, password }));
     setEmail("");
     setPassword("");
-    // Redirect to login page or show success message
   };
   return (
     <div className="flex">
