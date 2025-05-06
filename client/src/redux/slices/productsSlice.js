@@ -55,7 +55,7 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, productData }) => {
     const response = await axios.put(
-      `${API_URL}/api/v1/products/${productData.id}`,
+      `${API_URL}/api/v1/products/${id}`,
       productData,
       {
         headers: {
@@ -74,7 +74,9 @@ export const fetchSimilarProducts = createAsyncThunk(
     const response = await axios.get(
       `${API_URL}/api/v1/products/similar/${id}`
     );
-    return response.data;
+
+    console.log("similar products", response.data);
+    return response.data.data;
   }
 );
 
@@ -180,7 +182,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchSimilarProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.similarProducts = action.payload;
       })
       .addCase(fetchSimilarProducts.rejected, (state, action) => {
         state.loading = false;
