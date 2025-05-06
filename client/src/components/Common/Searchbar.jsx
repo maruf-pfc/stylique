@@ -1,28 +1,25 @@
 import React from "react";
 import { useState } from "react";
 import { HiMagnifyingGlass, HiMiniXMark } from "react-icons/hi2";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setFilters, fetchProductsByFilters } from "../../redux/slices/productsSlice";
 
 const Searchbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSearchToggle = () => {
     setIsOpen(!isOpen);
-    if (!isOpen) {
-      setTimeout(() => {
-        setIsFocused(true);
-      }, 0); // Delay to allow focus to be set after opening
-    } else {
-      setIsFocused(false);
-    }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    // Handle search logic here
-    console.log("Searching for:", searchTerm);
-    // Optionally, you can close the search bar after submitting
+    dispatch(setFilters({ search: searchTerm }));
+    dispatch(fetchProductsByFilters({ search: searchTerm }));
+    navigate(`/collection/all?search=${searchTerm}`);
     setIsOpen(false);
     setSearchTerm("");
   };
@@ -35,7 +32,7 @@ const Searchbar = () => {
       {isOpen ? (
         <form
           className="relative flex items-center justify-center w-full"
-          onSubmit={handleFormSubmit}
+          onSubmit={handleSearch}
         >
           {/* Search Input */}
           <div className="relative w-1/2">
