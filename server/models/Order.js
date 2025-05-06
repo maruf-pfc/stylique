@@ -76,7 +76,7 @@ const orderSchema = new mongoose.Schema(
       default: "Processing",
     },
   },
-  { timeseries: true } // Automatically add createdAt and updatedAt timestamps
+  { timestamps: true } // Automatically add createdAt and updatedAt timestamps
 );
 
 module.exports = mongoose.model("Order", orderSchema);

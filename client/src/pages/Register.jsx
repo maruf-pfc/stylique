@@ -13,7 +13,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const {user, guestId} = useSelector((state) => state.auth);
+  const { user, guestId } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   // get redirect parameter and check if it's checkout or something else
@@ -21,18 +21,16 @@ const Register = () => {
   const isCheckoutRedirect = redirect.includes("checkout");
 
   useEffect(() => {
-    if(user){
-      if(cart?.products?.length > 0 && guestId){
-        dispatch(mergeCart({guestId, user})).then(() => {
+    if (user) {
+      if (cart?.products?.length > 0 && guestId) {
+        dispatch(mergeCart({ guestId, user })).then(() => {
           navigate(isCheckoutRedirect ? "/checkout" : "/");
         });
-      }else{
+      } else {
         navigate(isCheckoutRedirect ? "/checkout" : "/");
       }
     }
-  }, [
-    user, guestId, cart, navigate, isCheckoutRedirect, dispatch
-  ])
+  }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -105,7 +103,10 @@ const Register = () => {
           </button>
           <p className="mt-6 text-center text-sm">
             Already have an account?{" "}
-            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-blue-500 hover:underline">
+            <Link
+              to={`/login?redirect=${encodeURIComponent(redirect)}`}
+              className="text-blue-500 hover:underline"
+            >
               Sign In
             </Link>
           </p>

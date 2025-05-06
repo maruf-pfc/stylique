@@ -3,7 +3,10 @@ import { useState } from "react";
 import { HiMagnifyingGlass, HiMiniXMark } from "react-icons/hi2";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFilters, fetchProductsByFilters } from "../../redux/slices/productsSlice";
+import {
+  setFilters,
+  fetchProductsByFilters,
+} from "../../redux/slices/productsSlice";
 
 const Searchbar = () => {
   const [searchTerm, setSearchTerm] = useState("");

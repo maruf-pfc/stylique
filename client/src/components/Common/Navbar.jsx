@@ -13,9 +13,12 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
-  const {cart} = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
-  const cartItemCount = cart?.products?.reduce((total, product) => product.quantity + total, 0) || 0;
+  const cartItemCount =
+    cart?.products?.reduce((total, product) => product.quantity + total, 0) ||
+    0;
 
   const toggleNavDrawer = () => {
     setNavDrawerOpen(!navDrawerOpen);
@@ -62,12 +65,14 @@ const Navbar = () => {
         </div>
         {/* Right - Search and Cart */}
         <div className="flex items-center space-x-4">
-          <Link
-            to="/admin"
-            className="block bg-black px-2 rounded text-sm text-white"
-          >
-            Admin
-          </Link>
+          {user && user.role === "admin" && (
+            <Link
+              to="/admin"
+              className="hidden md:block bg-black px-2 rounded text-sm text-white"
+            >
+              Admin
+            </Link>
+          )}
           <Link to="/profile" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
           </Link>
@@ -76,13 +81,11 @@ const Navbar = () => {
             className="relative hover:text-black"
           >
             <HiOutlineShoppingBag className="h-6 w-6 text-gray-700" />
-            {
-              cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full px-1">
-                  {cartItemCount}
-                </span>
-              )
-            }
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full px-1">
+                {cartItemCount}
+              </span>
+            )}
           </button>
           {/* Search */}
           <div className="overflow-hidden">

@@ -1,42 +1,29 @@
-import React from "react";
-
-const checkout = {
-  _id: "123",
-  createdAt: new Date(),
-  checkoutItems: [
-    {
-      productId: "123",
-      name: "Stylish T-Shirt",
-      size: "M",
-      color: "Black",
-      price: 29.99,
-      quantity: 1,
-      image: "https://picsum.photos/150?random=1",
-    },
-    {
-      productId: "456",
-      name: "Casual Sneakers",
-      size: "XL",
-      color: "White",
-      price: 49.99,
-      quantity: 1,
-      image: "https://picsum.photos/150?random=2",
-    },
-  ],
-
-  shippingAddress: {
-    address: "123 Main St",
-    city: "New York",
-    country: "USA",
-  },
-};
+import React, { useEffect } from "react";
+import { clearCart } from "../redux/slices/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const OrderConfirmationPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { checkout } = useSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (checkout && checkout._id) {
+      dispatch(clearCart());
+      localStorage.removeItem("cart");
+    } else {
+      // navigate("/my-orders");
+    }
+  }, [checkout, dispatch, navigate]);
+
   const calculateEstimatedDeliveryDate = (orderDate) => {
     const deliveryDate = new Date(orderDate);
     deliveryDate.setDate(deliveryDate.getDate() + 5); // Assuming 5 days for delivery
     return deliveryDate.toLocaleDateString();
   };
+
+  console.log("checkout", checkout);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
       <h1 className="text-4xl font-bold text-center text-emerald-700 mb-8">
