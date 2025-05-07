@@ -6,7 +6,7 @@ Stylique is a full-stack e-commerce web application designed to deliver a seamle
 
 ```tree
 stylique/
-├── client/    # Frontend (Next.js, Tailwind CSS, TypeScript)
+├── client/    # Frontend (React, Tailwind CSS, JavaScript)
 ├── server/    # Backend (Node.js, Express, MongoDB)
 └── README.md  # Root readme
 
