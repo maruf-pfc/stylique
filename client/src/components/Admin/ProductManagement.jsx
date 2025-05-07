@@ -1,40 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  fetchAdminProducts,
+  deleteProduct,
+} from "../../redux/slices/adminProductSlice";
 
 const ProductManagement = () => {
-  const products = [
-    {
-      _id: 12322,
-      name: "Product 1",
-      price: 100,
-      sku: "SKU123",
-    },
-    {
-      _id: 12324,
-      name: "Product 2",
-      price: 200,
-      sku: "SKU124",
-    },
-    {
-      _id: 12325,
-      name: "Product 3",
-      price: 300,
-      sku: "SKU125",
-    },
-    {
-      _id: 12375,
-      name: "Product 4",
-      price: 400,
-      sku: "SKU126",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector(
+    (state) => state.adminProducts
+  );
+
+  useEffect(() => {
+    dispatch(fetchAdminProducts());
+  }, [dispatch]);
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      // Call API to delete the product
-      console.log(`Product with id ${id} deleted`);
+      dispatch(deleteProduct(id));
+      dispatch(fetchAdminProducts());
     }
   };
+
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Product Management</h2>

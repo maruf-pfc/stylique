@@ -1,27 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchAllOrders } from "../../redux/slices/adminOrderSlice";
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([
-    {
-      _id: 234,
-      user: {
-        name: "John Doe",
-      },
-      totalPrice: 324,
-      status: "Processing",
-    },
-  ]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleStatusChange = (id, status) => {
-    // Update the order status in local state
-    const updatedOrders = orders.map((order) =>
-      order._id === id ? { ...order, status } : order
-    );
-    setOrders(updatedOrders);
+  const { user } = useSelector((state) => state.auth);
+  const { orders, loading, error } = useSelector((state) => state.adminOrders);
 
-    // Optionally call your API here
-    console.log(`Order with id ${id} updated to status ${status}`);
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/");
+    } else {
+      dispatch(fetchAllOrders());
+    }
+  }, [dispatch, user, navigate]);
+
+  const handleStatusChange = (orderId, status) => {
+    dispatch(updateOrderStatus({ orderId, status }));
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-6">

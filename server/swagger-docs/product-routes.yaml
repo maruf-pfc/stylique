@@ -35,7 +35,7 @@ paths:
                   products:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: "#/components/schemas/Product"
                   page:
                     type: integer
                   pages:
@@ -45,12 +45,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       summary: Create a new product
       tags: [Products]
       security:
-        - bearerAuth: []  # This indicates that a bearer token is required
+        - bearerAuth: [] # This indicates that a bearer token is required
       requestBody:
         required: true
         content:
@@ -96,25 +96,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: "#/components/schemas/Product"
         401:
           description: Not authorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         403:
           description: Not admin
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/products/filtered:
     get:
@@ -150,13 +150,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: "#/components/schemas/Product"
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/products/{id}:
     get:
@@ -175,25 +175,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: "#/components/schemas/Product"
         404:
           description: Product not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
     put:
       summary: Update product
       tags: [Products]
       security:
-        - bearerAuth: []  # This indicates that a bearer token is required
+        - bearerAuth: [] # This indicates that a bearer token is required
       parameters:
         - in: path
           name: id
@@ -239,37 +239,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: "#/components/schemas/Product"
         401:
           description: Not authorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         403:
           description: Not admin
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         404:
           description: Product not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
     delete:
       summary: Delete product
       tags: [Products]
       security:
-        - bearerAuth: []  # This indicates that a bearer token is required
+        - bearerAuth: [] # This indicates that a bearer token is required
       parameters:
         - in: path
           name: id
@@ -293,25 +293,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         403:
           description: Not admin
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         404:
           description: Product not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
         500:
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -340,7 +340,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT  # Assuming you're using JWT tokens
+      bearerFormat: JWT # Assuming you're using JWT tokens
 
 security:
-  - bearerAuth: []  # This applies the bearerAuth security scheme globally to the API
+  - bearerAuth: [] # This applies the bearerAuth security scheme globally to the API
